@@ -1,0 +1,53 @@
+<!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd" >
+<suite name="Capstone Suite - CrossBrowser + Routes" verbose="1" parallel="false">
+    <!-- base settings -->
+    <parameter name="baseUrl" value="https://demo5.cybersoft.edu.vn"/>
+    <parameter name="loginUrl" value="https://demo5.cybersoft.edu.vn/login"/>
+    <parameter name="username" value="test12113@gmail.com"/>
+    <parameter name="password" value="123123"/>
+    <parameter name="headless" value="false"/>
+    <parameter name="browser" value="chrome"/> <!-- chrome | firefox | edge | safari -->
+    <!-- routes (accepts {id} or %s) + default ids -->
+    <parameter name="titleRoute" value="/title/{id}"/>
+    <parameter name="categoryRoute" value="/categories/{id}"/>
+    <parameter name="detailRoute" value="/jobDetail/{id}"/>
+    <parameter name="titleId" value="1"/>
+    <parameter name="categoryId" value="2"/>
+    <parameter name="detailId" value="1"/>
+
+    <listeners>
+        <listener class-name="listeners.ExtentReportListener"/>
+        <listener class-name="listeners.SimpleListener"/>
+    </listeners>
+
+    <!-- NoLogin suite -->
+    <test name="WithoutLogin">
+        <parameter name="doLogin" value="false"/>
+        <groups>
+            <run>
+                <include name="WithoutLogin"/>
+
+            </run>
+        </groups>
+        <classes>
+            <class name="scripts.TitleTests"/>
+            <class name="scripts.CategoriesTests"/>
+            <class name="scripts.JobDetailTests"/>
+        </classes>
+    </test>
+
+    <!-- Login suite -->
+    <test name="WithLogin">
+        <parameter name="doLogin" value="true"/>
+        <groups>
+            <run>
+                <include name="WithLogin"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="scripts.TitleTests"/>
+            <class name="scripts.CategoriesTests"/>
+            <class name="scripts.JobDetailTests"/>
+        </classes>
+    </test>
+</suite>
