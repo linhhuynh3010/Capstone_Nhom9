@@ -9,8 +9,6 @@ import org.testng.*;
 import utils.ExtentManager;
 import utils.ScreenshotUtil;
 
-import java.lang.reflect.Field;
-
 public class ExtentReportListener implements ITestListener, ISuiteListener {
     private static ExtentReports extent;
     private static ThreadLocal<ExtentTest> test = new ThreadLocal<>();
@@ -37,20 +35,33 @@ public class ExtentReportListener implements ITestListener, ISuiteListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        test.get().skip("Skipped");
+        test.get().skip(result.getThrowable() != null
+                ? result.getThrowable()
+                : new SkipException("Skipped"));
     }
 
     @Override
     public void onTestFailure(ITestResult result) {
         test.get().fail(result.getThrowable());
+
         WebDriver driver = extractDriver(result);
         if (driver != null) {
-            String path = ScreenshotUtil.capture(driver, result.getMethod().getMethodName());
-            if (path != null) {
+            // 1) Gắn Base64 để đảm bảo hiển thị
+            String b64 = ScreenshotUtil.captureBase64(driver);
+            if (b64 != null && !b64.isEmpty()) {
                 try {
-                    test.get().fail("Screenshot:", MediaEntityBuilder.createScreenCaptureFromPath(path).build());
+                    test.get().fail("Screenshot:",
+                            MediaEntityBuilder.createScreenCaptureFromBase64String(b64).build());
                 } catch (Exception ignored) {
                 }
+            }
+            // 2) Lưu file và log đường dẫn tương đối (screenshots/...)
+            String relPath = ScreenshotUtil.captureToFile(driver, result.getMethod().getMethodName());
+            if (relPath != null) {
+                test.get().info("Saved to: " + relPath);
+                // Nếu muốn gắn theo path file thay vì Base64:
+                // test.get().fail("Screenshot (by path):",
+                //        MediaEntityBuilder.createScreenCaptureFromPath(relPath).build());
             }
         }
     }
@@ -65,7 +76,7 @@ public class ExtentReportListener implements ITestListener, ISuiteListener {
                 f.setAccessible(true);
                 Object v = f.get(instance);
                 if (v instanceof WebDriver) return (WebDriver) v;
-            } catch (Exception e) {
+            } catch (Exception ignored) {
             }
             c = c.getSuperclass();
         }

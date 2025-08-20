@@ -16,6 +16,10 @@ public class ExtentManager {
             } catch (Exception ignored) {
             }
             ExtentSparkReporter spark = new ExtentSparkReporter("reports/ExtentReport.html");
+            spark.config().setDocumentTitle("Automation Report");
+            spark.config().setReportName("Selenium Test Results");
+            spark.config().setTimeStampFormat("yyyy-MM-dd HH:mm:ss");
+
             extent = new ExtentReports();
             extent.attachReporter(spark);
             extent.setSystemInfo("Project", "Selenium Capstone");
