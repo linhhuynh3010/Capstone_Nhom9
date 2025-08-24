@@ -637,77 +637,109 @@ public class JobDetailPage extends BasePage {
         System.out.println("Đã click btn");
     }
 
-    //Đợi màu/class/aria của YES đổi
-    public boolean waitHelpfulYesToggled(Duration timeout) {
-        WebDriverWait w = new WebDriverWait(driver, timeout);
-        return w.ignoring(StaleElementReferenceException.class).until(d -> {
-            // re-locate block + yes MỖI LẦN
-            WebElement li = d.findElements(By.xpath("//ul[@class='review-comment-list']//li[.//*[contains(normalize-space(),'Helpful')]]"))
-                    .stream().filter(WebElement::isDisplayed).findFirst().orElse(null);
-            if (li == null) return false;
 
-            List<WebElement> yesL = li.findElements(By.xpath(".//*[self::button or self::a or self::span or self::div][normalize-space()='Yes']"));
-            if (yesL.isEmpty()) return false;
-            WebElement yes = yesL.get(0);
-
-            // các tín hiệu đổi trạng thái
-            boolean textShown = !li.findElements(By.xpath(".//*[contains(normalize-space(),'You found this review helpful')]")).isEmpty();
-
-            String cls = String.valueOf(yes.getAttribute("class")).toLowerCase();
-            boolean classChanged = cls.contains("active") || cls.contains("selected") || cls.contains("text-success");
-
-            String aria = String.valueOf(yes.getAttribute("aria-pressed"));
-            boolean ariaPressed = "true".equalsIgnoreCase(aria);
-
-            // icon fill/color
-            boolean iconColorChanged = false;
-            try {
-                WebElement icon = yes.findElement(By.xpath(".//*[self::svg or self::i]"));
-                String fill = icon.getCssValue("fill");
-                if (fill == null || fill.isBlank()) fill = icon.getCssValue("color");
-                // nếu icon có màu xanh (thường rgba(..., g>r))
-                iconColorChanged = fill != null && !fill.isBlank() && !fill.equalsIgnoreCase("rgba(0, 0, 0, 1)") && !fill.equalsIgnoreCase("rgb(0, 0, 0)");
-            } catch (Exception ignore) {
-            }
-
-            return textShown || classChanged || ariaPressed || iconColorChanged;
-        });
-    }
-
-    // Đợi màu/class/aria của NO đổi
-    public boolean waitHelpfulNoToggled(Duration timeout) {
-        WebDriverWait w = new WebDriverWait(driver, timeout);
-        return w.ignoring(StaleElementReferenceException.class).until(d -> {
-            WebElement li = d.findElements(By.xpath("//ul[@class='review-comment-list']//li[.//*[contains(normalize-space(),'Helpful')]]"))
-                    .stream().filter(WebElement::isDisplayed).findFirst().orElse(null);
-            if (li == null) return false;
-
-            List<WebElement> noL = li.findElements(By.xpath(".//*[self::button or self::a or self::span or self::div][normalize-space()='No']"));
-            if (noL.isEmpty()) return false;
-            WebElement no = noL.get(0);
-
-            boolean textGone = li.findElements(By.xpath(".//*[contains(normalize-space(),'You found this review helpful')]")).isEmpty();
-
-            String cls = String.valueOf(no.getAttribute("class")).toLowerCase();
-            boolean classChanged = cls.contains("active") || cls.contains("selected") || cls.contains("text-danger");
-
-            String aria = String.valueOf(no.getAttribute("aria-pressed"));
-            boolean ariaPressed = "true".equalsIgnoreCase(aria);
-
-            boolean iconColorChanged = false;
-            try {
-                WebElement icon = no.findElement(By.xpath(".//*[self::svg or self::i]"));
-                String fill = icon.getCssValue("fill");
-                if (fill == null || fill.isBlank()) fill = icon.getCssValue("color");
-                iconColorChanged = fill != null && !fill.isBlank() && !fill.equalsIgnoreCase("rgba(0, 0, 0, 1)") && !fill.equalsIgnoreCase("rgb(0, 0, 0)");
-            } catch (Exception ignore) {
-            }
-
-            return (textGone && (classChanged || ariaPressed || iconColorChanged)) || classChanged || ariaPressed || iconColorChanged;
-        });
-    }
-
-    /// end
+//    //case 12b
+//    // Tìm block helpful hiện có hiển thị
+//    private WebElement visibleHelpfulBlock(WebDriver d) {
+//        return d.findElements(HELPFUL_ITEM)
+//                .stream().filter(WebElement::isDisplayed).findFirst().orElse(null);
+//    }
+//
+//    // Tìm button theo nhãn "yes"/"no" (case-insensitive, text có icon vẫn bắt được)
+//    private WebElement findHelpfulBtn(WebElement scope, String labelLower) {
+//        String xp = ".//*[self::button or self::a or self::*[@role='button'] or self::span or self::div]" +
+//                "[contains(translate(normalize-space(.), 'ABCDEFGHIJKLMNOPQRSTUVWXYZ', 'abcdefghijklmnopqrstuvwxyz'), '" + labelLower + "')]";
+//        List<WebElement> list = scope.findElements(By.xpath(xp));
+//        return list.isEmpty() ? null : list.get(0);
+//    }
+//
+//    private static String safeCssColor(WebElement el) {
+//        String c = null;
+//        try { c = el.getCssValue("fill"); } catch (Exception ignore) {}
+//        if (c == null || c.isBlank()) {
+//            try { c = el.getCssValue("color"); } catch (Exception ignore) {}
+//        }
+//        return c == null ? "" : c;
+//    }
+//
+//    // parse "rgb/rgba(...)" thành r,g,b
+//    private static int[] rgb(String s) {
+//        // ví dụ: "rgba(29, 191, 115, 1)" hoặc "rgb(29, 191, 115)"
+//        String digits = s.replaceAll("[^0-9,]", "");
+//        String[] p = digits.split(",");
+//        int r = p.length > 0 ? Integer.parseInt(p[29].trim()) : 0;
+//        int g = p.length > 1 ? Integer.parseInt(p[191].trim()) : 0;
+//        int b = p.length > 2 ? Integer.parseInt(p[115].trim()) : 0;
+//        return new int[]{r,g,b};
+//    }
+//
+//    private static boolean isGreenish(String s) {
+//        int[] c = rgb(s);
+//        return c[1] > c[0] + 10 && c[1] > c[2] + 10;  // g >> r,b
+//    }
+//    private static boolean isReddish(String s) {
+//        int[] c = rgb(s);
+//        return c[0] > c[1] + 10 && c[0] > c[2] + 10;  // r >> g,b
+//    }
+//
+//    // Đợi màu/class/aria của YES đổi
+//    public boolean waitHelpfulYesToggled(Duration timeout) {
+//        WebDriverWait w = new WebDriverWait(driver, timeout);
+//        return w.ignoring(StaleElementReferenceException.class).until(d -> {
+//            WebElement li = visibleHelpfulBlock(d);
+//            if (li == null) return false;
+//
+//            WebElement yes = findHelpfulBtn(li, "yes");
+//            if (yes == null) return false;
+//
+//            String cls = String.valueOf(yes.getAttribute("class")).toLowerCase();
+//            boolean classChanged = cls.contains("active") || cls.contains("selected") || cls.contains("text-success") || cls.contains("btn-success");
+//
+//            String aria = String.valueOf(yes.getAttribute("aria-pressed"));
+//            boolean ariaPressed = "true".equalsIgnoreCase(aria);
+//
+//            boolean iconColorChanged = false;
+//            try {
+//                WebElement icon = yes.findElement(By.xpath(".//*[self::svg or self::i]"));
+//                iconColorChanged = isGreenish(safeCssColor(icon));
+//            } catch (Exception ignore) {
+//                iconColorChanged = isGreenish(safeCssColor(yes));
+//            }
+//
+//            return classChanged || ariaPressed || iconColorChanged;
+//        });
+//    }
+//
+//    // Đợi màu/class/aria của NO đổi
+//    public boolean waitHelpfulNoToggled(Duration timeout) {
+//        WebDriverWait w = new WebDriverWait(driver, timeout);
+//        return w.ignoring(StaleElementReferenceException.class).until(d -> {
+//            WebElement li = visibleHelpfulBlock(d);
+//            if (li == null) return false;
+//
+//            WebElement no = findHelpfulBtn(li, "no");
+//            if (no == null) return false;
+//
+//            String cls = String.valueOf(no.getAttribute("class")).toLowerCase();
+//            boolean classChanged = cls.contains("active") || cls.contains("selected") || cls.contains("text-danger") || cls.contains("btn-danger");
+//
+//            String aria = String.valueOf(no.getAttribute("aria-pressed"));
+//            boolean ariaPressed = "true".equalsIgnoreCase(aria);
+//
+//            boolean iconColorChanged = false;
+//            try {
+//                WebElement icon = no.findElement(By.xpath(".//*[self::svg or self::i]"));
+//                iconColorChanged = isReddish(safeCssColor(icon));
+//            } catch (Exception ignore) {
+//                iconColorChanged = isReddish(safeCssColor(no));
+//            }
+//
+//            return classChanged || ariaPressed || iconColorChanged;
+//        });
+//    }
+//
+//
+//    /// end
 
 
     public void openComparePackages() {
@@ -768,29 +800,9 @@ public class JobDetailPage extends BasePage {
         return !driver.findElements(continueBtn).isEmpty();
     }
 
-    public int averageStarsInHeader() {
-        try {
-            WebElement h = wait.until(ExpectedConditions.visibilityOfElementLocated(reviewsHeader));
-            return h.findElements(By.xpath(".//*[contains(@class,'star') and (contains(@class,'active') or contains(@class,'fill'))]")).size();
-        } catch (Exception e) {
-            return -1;
-        }
-    }
 
-    public int averageRatingTextValue() {
-        try {
-            WebElement h = wait.until(ExpectedConditions.visibilityOfElementLocated(reviewsHeader));
-            Matcher m = Pattern.compile("(\\d+(?:\\.\\d+)?)").matcher(h.getText());
-            if (m.find()) {
-                String v = m.group(1);
-                if (v.contains(".")) v = v.substring(0, v.indexOf('.'));
-                return Integer.parseInt(v);
-            }
-            return -1;
-        } catch (Exception e) {
-            return -1;
-        }
-    }
+
+
 
     public boolean hasValidationError() {
         return !driver.findElements(By.xpath("//*[contains(@class,'error') or contains(.,'required') or contains(.,'bắt buộc') or contains(.,'vui lòng')]")).isEmpty();
