@@ -1,15 +1,16 @@
 package pages;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Title
+ * */
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.openqa.selenium.ElementNotInteractableException;
-
 import java.time.Duration;
 import java.util.List;
-import java.util.Objects;
+
 
 
 public class TitlePage extends BasePage {
@@ -17,8 +18,6 @@ public class TitlePage extends BasePage {
     public TitlePage(WebDriver d) {
         super(d);
     }
-
-    // Keep timeouts modest for stability
 
     // Popular chips/tags
 

@@ -1,22 +1,25 @@
 package scripts;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.WebDriverWait;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Jobdetail test
+ * */
+
+//@Epic("Tìm kiếm và thuê dịch vụ của  Website https://demo5.cybersoft.edu.vn/")
+//@Feature("Kiểm tra các chức năng của trang Jobdetail")
+
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.JobDetailPage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 
-public class JobDetailTests extends BaseTest {
 
+
+public class JobDetailTests extends BaseTest {
 
     @Test(groups = {"WithoutLogin", "WithLogin"}, description = "JOB-01 - Mở trang chi tiết job hiển thị đầy đủ thành phần chính")
     public void JOB_01_openDetailHasKeySections() {
@@ -24,7 +27,9 @@ public class JobDetailTests extends BaseTest {
         JobDetailPage p = new JobDetailPage(driver);
         p.waitPageReady();
         Assert.assertTrue(p.hasContinueButton(), "Thiếu nút Continue/giỏ hàng");
+
     }
+
 
 
     @DataProvider

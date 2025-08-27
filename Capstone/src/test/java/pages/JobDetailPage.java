@@ -1,4 +1,9 @@
 package pages;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Jobdetail
+ * */
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.*;

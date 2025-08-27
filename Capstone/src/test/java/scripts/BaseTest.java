@@ -1,4 +1,9 @@
 package scripts;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Base Test
+ * */
 
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;

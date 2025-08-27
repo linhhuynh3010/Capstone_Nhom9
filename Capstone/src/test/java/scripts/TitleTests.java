@@ -1,12 +1,18 @@
 package scripts;
 
-import org.openqa.selenium.support.ui.ExpectedConditions;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Title test
+ * */
+
+//@Epic("Tìm kiếm và thuê dịch vụ của  Website https://demo5.cybersoft.edu.vn/")
+//@Feature("Kiểm tra các chức năng của trang title ")
+
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.CategoriesPage;
 import pages.TitlePage;
-
 import java.time.Duration;
 
 public class TitleTests extends BaseTest {

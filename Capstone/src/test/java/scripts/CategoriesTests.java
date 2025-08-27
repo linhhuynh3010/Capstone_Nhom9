@@ -1,11 +1,18 @@
 package scripts;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Categories Test
+ * */
+
+//@Epic("Tìm kiếm và thuê dịch vụ của  Website https://demo5.cybersoft.edu.vn/")
+//@Feature("Kiểm tra các chức năng của trang categories")
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CategoriesPage;
-
 import java.time.Duration;
 
 public class CategoriesTests extends BaseTest {
