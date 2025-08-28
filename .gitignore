@@ -28,3 +28,4 @@ Capstone/reports/screenshots/VerifyBookingServiceSuccessfully_20250827_191021_48
 Capstone/reports/screenshots/VerifyBookingServiceUnsuccessfully_20250827_191423_160.png
 Capstone/target/test-classes/pages/ProfilePage.class
 Capstone/target/test-classes/scripts/BookingFlowTest.class
+*.png

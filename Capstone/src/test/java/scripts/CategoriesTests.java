@@ -1,15 +1,22 @@
 package scripts;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Categories Test
+ * */
+
+//@Epic("Tìm kiếm và thuê dịch vụ của  Website https://demo5.cybersoft.edu.vn/")
+//@Feature("Kiểm tra các chức năng của trang categories")
 
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.CategoriesPage;
-
 import java.time.Duration;
 
 public class CategoriesTests extends BaseTest {
-    @Test(groups = {"WithoutLogin"}, description = "CAT-01 - Số card hiển thị bằng số \"services available\"")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-01 - Số card hiển thị bằng số \"services available\"")
     public void CAT_01_servicesAvailableMatchesCardCount() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -18,7 +25,7 @@ public class CategoriesTests extends BaseTest {
     }
 
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-02 - Chọn Category từ dropdown")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-02 - Chọn Category từ dropdown")
     public void CAT_02_selectCategory() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -33,7 +40,7 @@ public class CategoriesTests extends BaseTest {
     }
 
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-03 - Chọn Service Options từ dropdown")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-03 - Chọn Service Options từ dropdown")
     public void CAT_03_selectServiceOptions() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -48,7 +55,7 @@ public class CategoriesTests extends BaseTest {
     }
 
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-04 - Chọn Seller Details từ dropdown")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-04 - Chọn Seller Details từ dropdown")
     public void CAT_04_selectSellerDetails() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -62,7 +69,7 @@ public class CategoriesTests extends BaseTest {
 
     }
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-05 - Chọn Delivery Time từ dropdown")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-05 - Chọn Delivery Time từ dropdown")
     public void CAT_05_selectDeliveryTime() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -75,7 +82,7 @@ public class CategoriesTests extends BaseTest {
                 "Số lượng card không thay đổi sau khi chọn Delivery Time  '" + picked + "'. Trước: " + before + " | Sau: " + after);
     }
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-06 - Bật/Tắt Pro services (chỉ còn card Pro nếu có, tắt về đầy đủ)")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-06 - Bật/Tắt Pro services (chỉ còn card Pro nếu có, tắt về đầy đủ)")
     public void CAT_06_toggleProServices() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -105,7 +112,7 @@ public class CategoriesTests extends BaseTest {
     }
 
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-07 - Bật/Tắt Local sellers (thu gọn / khôi phục danh sách)")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-07 - Bật/Tắt Local sellers (thu gọn / khôi phục danh sách)")
     public void CAT_07_toggleLocalSellers() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -132,7 +139,7 @@ public class CategoriesTests extends BaseTest {
     }
 
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-08 - Bật/Tắt Online sellers (thu gọn / khôi phục danh sách)")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-08 - Bật/Tắt Online sellers (thu gọn / khôi phục danh sách)")
     public void CAT_08_toggleOnlineSellers() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -155,7 +162,7 @@ public class CategoriesTests extends BaseTest {
                 "Tắt Online sellers nhưng danh sách không quay lại đầy đủ (trước: " + totalBefore + ", sau: " + totalAfterOff + ")");
     }
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-09 - Đổi Sort By")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-09 - Đổi Sort By")
     public void CAT_09_changeSortBy() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);
@@ -175,7 +182,7 @@ public class CategoriesTests extends BaseTest {
     }
 
 
-    @Test(groups = {"WithoutLogin"}, description = "CAT-10 - Click card để vào chi tiết job")
+    @Test(groups = {"WithoutLogin", "WithLogin"}, description = "CAT-10 - Click card để vào chi tiết job")
     public void CAT_10_clickCardToDetail() {
         go(pathCategory());
         CategoriesPage p = new CategoriesPage(driver);

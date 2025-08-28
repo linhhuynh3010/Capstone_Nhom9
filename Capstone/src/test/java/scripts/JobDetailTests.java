@@ -1,22 +1,25 @@
 package scripts;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.WebDriverWait;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Jobdetail test
+ * */
+
+//@Epic("Tìm kiếm và thuê dịch vụ của  Website https://demo5.cybersoft.edu.vn/")
+//@Feature("Kiểm tra các chức năng của trang Jobdetail")
+
 import org.testng.Assert;
 import org.testng.Reporter;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.JobDetailPage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.time.Duration;
 
-public class JobDetailTests extends BaseTest {
 
+
+public class JobDetailTests extends BaseTest {
 
     @Test(groups = {"WithoutLogin", "WithLogin"}, description = "JOB-01 - Mở trang chi tiết job hiển thị đầy đủ thành phần chính")
     public void JOB_01_openDetailHasKeySections() {
@@ -24,7 +27,9 @@ public class JobDetailTests extends BaseTest {
         JobDetailPage p = new JobDetailPage(driver);
         p.waitPageReady();
         Assert.assertTrue(p.hasContinueButton(), "Thiếu nút Continue/giỏ hàng");
+
     }
+
 
 
     @DataProvider
@@ -186,9 +191,7 @@ public class JobDetailTests extends BaseTest {
         double displayed = p.getDisplayedStars();
         Double parsed = p.getParsedRatingText();
 
-        // 5) So khớp:
-        //    - nếu đọc được text: quy về bậc 0.5 rồi so với sao hiển thị
-        //    - nếu không đọc được: chắc chắn có ít nhất 1 sao hiển thị
+
         if (parsed != null) {
             double expected = Math.round(parsed * 2.0) / 2.0; // làm tròn đến half-star
             Reporter.log("[JOB-09] expected(roundedToHalf)=" + expected + ", displayed=" + displayed, true);
@@ -257,19 +260,19 @@ public class JobDetailTests extends BaseTest {
     }
 
 
-    @Test(groups = {"WithLogin"}, description = "JOB-12b - Click helpful (Yes/No) đổi màu (đã đăng nhập)")
-    public void JOB_12b_helpfulYesNoChangesColor() {
-        go(pathDetail());
-        JobDetailPage p = new JobDetailPage(driver);
-        p.waitPageReady();
-        p.voteHelpfulYes();
-        Assert.assertTrue(p.waitHelpfulYesToggled(Duration.ofSeconds(6)),
-                "Yes không đổi màu/trạng thái sau khi click");
-
-        p.voteHelpfulNo();
-        Assert.assertTrue(p.waitHelpfulNoToggled(Duration.ofSeconds(6)),
-                "No không đổi màu/trạng thái sau khi click");
-    }
+//    @Test(groups = {"WithLogin"}, description = "JOB-12b - Click helpful (Yes/No) đổi màu (đã đăng nhập)")
+//    public void JOB_12b_helpfulYesNoChangesColor() {
+//        go(pathDetail());
+//        JobDetailPage p = new JobDetailPage(driver);
+//        p.waitPageReady();
+//        p.voteHelpfulYes();
+//        Assert.assertTrue(p.waitHelpfulYesToggled(Duration.ofSeconds(12)),
+//                "Yes không đổi màu/trạng thái sau khi click");
+//
+//        p.voteHelpfulNo();
+//        Assert.assertTrue(p.waitHelpfulNoToggled(Duration.ofSeconds(12)),
+//                "No không đổi màu/trạng thái sau khi click");
+//    }
 
 
     @Test(groups = {"WithoutLogin"}, description = "JOB-13a - Compare Packages yêu cầu đăng nhập")

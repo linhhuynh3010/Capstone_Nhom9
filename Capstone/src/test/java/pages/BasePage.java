@@ -1,4 +1,9 @@
 package pages;
+/*
+ * @Author: Huỳnh Mai Linh
+ * @Version: 1.0
+ * @Function: Page Base
+ * */
 
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.Actions;
