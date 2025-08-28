@@ -33,6 +33,7 @@
             <class name="scripts.TitleTests"/>
             <class name="scripts.CategoriesTests"/>
             <class name="scripts.JobDetailTests"/>
+            <class name="scripts.BookingFlowTest"/>
         </classes>
     </test>
 
@@ -48,6 +49,7 @@
             <class name="scripts.TitleTests"/>
             <class name="scripts.CategoriesTests"/>
             <class name="scripts.JobDetailTests"/>
+            <class name="scripts.BookingFlowTest"/>
         </classes>
     </test>
 </suite>
