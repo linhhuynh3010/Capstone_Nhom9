@@ -852,6 +852,45 @@ public class JobDetailPage extends BasePage {
         }
     }
 
+    public boolean continueAndScrollToContinueButtonAndWaitHireSuccess(Duration timeout) {
+        // đảm bảo trang sẵn sàng (nếu bạn có waitPageReady thì gọi)
+        // waitPageReady();
+
+        WebElement btn = new WebDriverWait(driver, Duration.ofSeconds(12))
+                .until(ExpectedConditions.presenceOfElementLocated(continueBtn));
+
+        ((JavascriptExecutor) driver).executeScript(
+                "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", btn);
+
+        safeClick(btn);
+
+        final String needle = "thue cong viec thanh cong"; // đã bỏ dấu
+        try {
+            return new WebDriverWait(driver, timeout)
+                    .ignoring(org.openqa.selenium.StaleElementReferenceException.class)
+                    .until(d -> {
+                        // ưu tiên phần tử toast hiển thị
+                        for (WebElement el : d.findElements(TOAST_ANY)) {
+                            if (!el.isDisplayed()) continue;
+                            String txt = norm(el.getText());
+                            if (txt.contains(needle)) return true;
+                        }
+                        // fallback: tìm trong pageSource
+                        return norm(d.getPageSource()).contains(needle);
+                    });
+        } catch (org.openqa.selenium.TimeoutException e) {
+            // debug giúp soi vì sao fail
+            System.out.println("[JOB-04b] Không thấy toast. Các candidate:");
+            for (WebElement el : driver.findElements(TOAST_ANY)) {
+                try {
+                    System.out.println(" - " + el.getAttribute("class") + " | " + el.getText());
+                } catch (Exception ignore) {
+                }
+            }
+            return false;
+        }
+    }
+
     // Thuê lần 2 → chờ confirm "Bạn có chắc muốn thuê lại dịch vụ này?"
     public boolean continueAndWaitRehireConfirm(Duration timeout) {
         WebElement btn = new WebDriverWait(driver, Duration.ofSeconds(12))
@@ -917,6 +956,11 @@ public class JobDetailPage extends BasePage {
         String url = driver.getCurrentUrl();
         if (url == null || url.isBlank()) return "";
         return url.replaceAll(".*/", ""); // lấy phần sau dấu /
+    }
+
+    public void minimizeWindow() throws InterruptedException {
+        driver.manage().window().setSize(new Dimension(820, 1180));
+        Thread.sleep(3000);
     }
 
 }

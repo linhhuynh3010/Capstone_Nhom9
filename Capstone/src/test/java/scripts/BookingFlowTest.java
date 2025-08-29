@@ -18,7 +18,7 @@ import java.time.Duration;
 
 public class BookingFlowTest extends BaseTest {
     @Test(groups = {"WithLogin"}, description = "Verify that user can book service successfully when logged in with message \"Thuê công việc thành công\"")
-    public void BF001_VerifyBookingServiceSuccessfully() {
+    public void BF_F01_VerifyBookingServiceSuccessfully() {
         go(pathDetail());
         JobDetailPage p = new JobDetailPage(driver);
         p.waitPageReady();
@@ -30,7 +30,7 @@ public class BookingFlowTest extends BaseTest {
     }
 
     @Test(groups = {"WithLogin"}, description = "Verify that user can see message \"Bạn có chắc muốn thuê lại dịch vụ này?\" when booking a service twice.")
-    public void BF002_VerifyBookingAServiceTwice() {
+    public void BF_F05_VerifyBookingAServiceTwice() {
         go(pathDetail());
         JobDetailPage p = new JobDetailPage(driver);
         p.waitPageReady();
@@ -83,6 +83,19 @@ public class BookingFlowTest extends BaseTest {
         Assert.assertTrue(
                 pp.verifyNumberOfBookedService(expectedNumber),
                 "Number of booked service is not increased: expected=" + expectedNumber + driver.getCurrentUrl()
+        );
+    }
+
+    @Test(groups = {"WithLogin"}, description = "Verify that user can book a service after minimizing the window.")
+    public void BF_F10_VerifyBookingServiceSuccessfullyInMinimizedWindow() throws InterruptedException {
+        go(pathDetail());
+        JobDetailPage p = new JobDetailPage(driver);
+        p.waitPageReady();
+        p.minimizeWindow();
+
+        Assert.assertTrue(
+                p.continueAndScrollToContinueButtonAndWaitHireSuccess(Duration.ofSeconds(10)),
+                "Không thấy message 'Thuê công việc thành công'. URL: " + driver.getCurrentUrl()
         );
     }
 
