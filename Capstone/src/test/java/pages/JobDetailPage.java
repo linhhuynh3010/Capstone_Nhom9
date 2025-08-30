@@ -10,6 +10,7 @@ import org.openqa.selenium.support.ui.*;
 
 import java.time.Duration;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.*;
 
 public class JobDetailPage extends BasePage {
@@ -64,6 +65,7 @@ public class JobDetailPage extends BasePage {
     // FAQ
     private final By faqFirstCheckbox = By.cssSelector(".FAQ ul li:nth-of-type(1) > input[type='checkbox']");
     private final By faqFirstContent = By.cssSelector(".FAQ ul li:nth-of-type(1) > p");
+    private final By standardButton = By.xpath("(//button[contains(@class,'nav-link') and normalize-space(text())='Standard'])[1]");
 
 
     // ===== Actions =====
@@ -958,9 +960,14 @@ public class JobDetailPage extends BasePage {
         return url.replaceAll(".*/", ""); // lấy phần sau dấu /
     }
 
-    public void minimizeWindow() throws InterruptedException {
-        driver.manage().window().setSize(new Dimension(820, 1180));
-        Thread.sleep(3000);
+    public void minimizeWindow(int width, int height) throws InterruptedException {
+        driver.manage().window().setSize(new Dimension(width, height));
+    }
+
+    public void chooseServiceLevel(String level) {
+        if (Objects.equals(level, "Standard")) {
+            safeClick(driver.findElement(standardButton));
+        }
     }
 
 }

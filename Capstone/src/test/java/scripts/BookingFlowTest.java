@@ -1,17 +1,9 @@
 package scripts;
 
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.Assert;
 import org.testng.Reporter;
-import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 import pages.JobDetailPage;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pages.ProfilePage;
 
 import java.time.Duration;
@@ -53,10 +45,10 @@ public class BookingFlowTest extends BaseTest {
         p.waitPageReady();
         String serviceID = p.getJobIdFromUrl();
 
-        Assert.assertTrue(
-                p.continueAndWaitHireSuccess(Duration.ofSeconds(10)),
-                "Không thấy message 'Thuê công việc thành công'. URL: " + driver.getCurrentUrl()
-        );
+        // Log serviceID ra report + console
+        Reporter.log("[BF003] Booking serviceID=" + serviceID, true);
+
+        Assert.assertTrue(p.continueAndWaitHireSuccess(Duration.ofSeconds(10)), "Không thấy message 'Thuê công việc thành công'. URL: " + driver.getCurrentUrl());
 
         ProfilePage pp = new ProfilePage(driver);
         pp.goToProfilePage();
@@ -66,6 +58,7 @@ public class BookingFlowTest extends BaseTest {
         );
     }
 
+    // Need update Reporter
     @Test(groups = {"WithLogin"}, description = "Verify that number of service increased 1 after booking a service successfully.")
     public void BF004_VerifyBookedServiceInProfilePage() throws InterruptedException {
         ProfilePage pp = new ProfilePage(driver);
@@ -91,7 +84,22 @@ public class BookingFlowTest extends BaseTest {
         go(pathDetail());
         JobDetailPage p = new JobDetailPage(driver);
         p.waitPageReady();
-        p.minimizeWindow();
+        p.minimizeWindow(390, 844);
+
+        Assert.assertTrue(
+                p.continueAndScrollToContinueButtonAndWaitHireSuccess(Duration.ofSeconds(10)),
+                "Không thấy message 'Thuê công việc thành công'. URL: " + driver.getCurrentUrl()
+        );
+    }
+
+    // Need Update reporter
+    @Test(groups = {"WithLogin"}, description = "Verify that user can book a standard service after minimizing the window.")
+    public void BF_F11_VerifyBookingStandardServiceSuccessfullyInMinimizedWindow() throws InterruptedException {
+        go(pathDetail());
+        JobDetailPage p = new JobDetailPage(driver);
+        p.waitPageReady();
+        p.minimizeWindow(390, 844);
+        p.chooseServiceLevel("Standard");
 
         Assert.assertTrue(
                 p.continueAndScrollToContinueButtonAndWaitHireSuccess(Duration.ofSeconds(10)),
